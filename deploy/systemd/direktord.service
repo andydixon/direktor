@@ -1,0 +1,22 @@
+[Unit]
+Description=Direktor process supervisor
+Documentation=https://github.com/andydixon/direktor
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/direktor/direktord.env
+Environment=DIREKTORD_CONFIG=/etc/direktor/direktor.conf
+ExecStart=/usr/local/bin/direktord -n -c ${DIREKTORD_CONFIG}
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=5s
+LogsDirectory=direktor
+RuntimeDirectory=direktor
+RuntimeDirectoryMode=0755
+WorkingDirectory=/etc/direktor
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
